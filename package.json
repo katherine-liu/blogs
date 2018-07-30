@@ -1,0 +1,24 @@
+{
+  "name": "foodieTalk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Katherine Liu, katherinelovingsmile@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "gridfs-stream": "^1.1.1",
+    "method-override": "^2.3.10",
+    "mongoose": "^5.0.7",
+    "multer": "^1.3.0",
+    "multer-gridfs-storage": "^3.0.1",
+    "nodemon": "^1.17.1",
+    "request": "^2.83.0"
+  }
+}
