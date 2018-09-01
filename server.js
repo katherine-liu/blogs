@@ -1,10 +1,11 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const eventRouter = require('./src/routes/blogRouter')
-const app = express()
-const port = process.env.PORT || 3000
+const express = require('express');
+const bodyParser = require('body-parser');
+const eventRouter = require('./src/routes/blogRouter');
+const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use('/images', express.static('public/images'));
 
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -21,7 +22,7 @@ app.use(function(req, res, next) {
 // @desc Loads
 app.get('/', (req, res) => {
   res.send('This is the foodie backend server, Listening on port: 3000!')
-})
+});
 
 app.use('/api', eventRouter)
 

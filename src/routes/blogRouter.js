@@ -1,18 +1,23 @@
 const express = require('express')
-const EventCtrl = require('../controllers/blogCtrl')
-const UploadCtrl = require('../controllers/uploadCtrl')
+const EventCtrl = require('../controllers/blog/blogCtrl')
+const UploadCtrl = require('../controllers/blog/uploadCtrl')
 const router = express.Router()
 
-router.route('/upload')
+router.route('/images')
+.get(UploadCtrl.downloadImage)
 .post(UploadCtrl.uploadImage)
+
+router.route('/images/:id')
+.get(UploadCtrl.getImageById)
+.put(UploadCtrl.updateById)
 
 router.route('/blogs')
 .get(EventCtrl.get)
-.post(EventCtrl.save)
+.post(UploadCtrl.uploadImage, EventCtrl.save)
 
 router.route('/blogs/:id')
 .get(EventCtrl.getById)
-.patch(EventCtrl.updateById)
+.put(UploadCtrl.uploadImage, EventCtrl.updateById)
 .delete(EventCtrl.destroyById)
 
 module.exports = router
