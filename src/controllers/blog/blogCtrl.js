@@ -1,4 +1,4 @@
-const { Blog } = require('../../models/blog')
+const { Blog } = require('../../models/blog');
 
 const get = (req, res) => {
   Blog.find()
@@ -6,6 +6,12 @@ const get = (req, res) => {
     const response = {
       count: docs.length,
       blogs: docs.map(doc => {
+        const imageFile = doc.image;
+        let imageUrl = null;
+        if (imageFile.filename !== undefined) {
+          imageUrl = 'http://localhost:3000/images/' + imageFile.filename
+          console.log(imageUrl);
+        }
         return {
           title: doc.title,
           author: doc.author,
@@ -15,7 +21,7 @@ const get = (req, res) => {
           _id: doc._id,
           request: {
             type: 'GET',
-            url: 'http://localhost:3000/images/' + doc.image.filename
+            url: imageUrl
           }
         };
       })
@@ -31,25 +37,27 @@ const save = (req, res) => {
     title: item.title,
     author: item.author,
     content: item.content,
-    image: {
-      path: req.file.path,
-      filename: req.file.filename
-    }
+    image: req.file
   });
 
   blog.save()
-  .then(result => {
+  .then(doc => {
+    const imageFile = doc.image;
+    let imageUrl = null;
+    if (imageFile.filename !== undefined) {
+      imageUrl = 'http://localhost:3000/images/' + imageFile.filename
+    }
     res.status(201).json({
       message: 'Created blog successfully',
       createdBlog: {
-        title: result.title,
-        author: result.author,
-        content: result.content,
-        image: result.image,
-        _id: result._id,
+        title: doc.title,
+        author: doc.author,
+        content: doc.content,
+        image: doc.image,
+        _id: doc._id,
         request: {
           type: 'GET',
-          url: 'http://localhost:3000/images/' + req.file.filename
+          url: imageUrl
         }
       }
     });
@@ -62,6 +70,11 @@ const getById = (req, res) => {
 
   Blog.findById(id)
   .then(doc => {
+    const imageFile = doc.image;
+    let imageUrl = null;
+    if (imageFile.filename !== undefined) {
+      imageUrl = 'http://localhost:3000/images/' + doc.image.filename
+    }
     res.send({
       blog: {
         title: doc.title,
@@ -72,7 +85,7 @@ const getById = (req, res) => {
         _id: doc._id,
         request: {
           type: 'GET',
-          url: 'http://localhost:3000/images/' + doc.image.filename
+          url: imageUrl
         }
       }
     });
@@ -88,27 +101,34 @@ const updateById = (req, res) => {
     title: item.title,
     author: item.author,
     content: item.content,
-    image: {
-      path: req.file.path,
-      filename: req.file.filename
-    }
   };
 
+  if (req.file) {
+    body.image = req.file;
+  }
+
   Blog.findByIdAndUpdate(id, { $set: body }, { new: true })
-  .then(doc => res.send({
-    blog: {
-      title: doc.title,
-      author: doc.author,
-      content: doc.content,
-      image: doc.image,
-      createOn: doc.createOn,
-      _id: doc._id,
-      request: {
-        type: 'GET',
-        url: 'http://localhost:3000/images/' + doc.image.filename
-      }
+  .then(doc => {
+    const imageFile = doc.image;
+    let imageUrl = null;
+    if (imageFile.filename !== undefined) {
+      imageUrl = 'http://localhost:3000/images/' + imageFile.filename
     }
-  }))
+    res.send({
+      blog: {
+        title: doc.title,
+        author: doc.author,
+        content: doc.content,
+        image: doc.image,
+        createOn: doc.createOn,
+        _id: doc._id,
+        request: {
+          type: 'GET',
+          url: 'http://localhost:3000/images/' + doc.image.filename
+        }
+      }
+    })
+  })
   .catch(err => console.log(err));
 }
 
@@ -116,20 +136,27 @@ const destroyById = (req, res) => {
   const id = req.params.id
 
   Blog.findByIdAndRemove(id)
-  .then(doc => res.send({
-    blog: {
-      title: doc.title,
-      author: doc.author,
-      content: doc.content,
-      image: doc.image,
-      createOn: doc.createOn,
-      _id: doc._id,
-      request: {
-        type: 'GET',
-        url: 'http://localhost:3000/images/' + doc.image.filename
-      }
+  .then(doc => {
+    const imageFile = doc.image;
+    let imageUrl = null;
+    if (imageFile.filename !== undefined) {
+      imageUrl = 'http://localhost:3000/images/' + imageFile.filename
     }
-  }))
+    res.send({
+      blog: {
+        title: doc.title,
+        author: doc.author,
+        content: doc.content,
+        image: doc.image,
+        createOn: doc.createOn,
+        _id: doc._id,
+        request: {
+          type: 'GET',
+          url: imageUrl
+        }
+      }
+    })
+  })
   .catch(err => console.log(err))
 }
 

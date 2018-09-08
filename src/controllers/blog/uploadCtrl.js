@@ -37,7 +37,8 @@ const uploadImage = (req, res, next) => {
       res.status(415).json({ msg: 'Error: Upload Image Only!', error: err });
     } else {
       if (req.file === undefined) {
-        res.status(415).json({ msg: 'Error: No File Selected!', error: err });
+        next();
+        // res.status(415).json({ msg: 'Error: No File Selected!', error: err });
       } else {
         // res.send({ msg: 'File Uploaded!', file: `uploads/$(req.file.filename)`});
         next();

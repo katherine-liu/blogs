@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const uri = 'mongodb://127.0.0.1:27017/foodietalk'
+// const uri = 'mongodb://127.0.0.1:27017/foodietalk'
+const uri = 'mongodb://dearcatkin111:liuS122619@ds257589.mlab.com:57589/kath-blog';
 const options = {};
 
 mongoose.Promise = global.Promise;

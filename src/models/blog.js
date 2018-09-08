@@ -3,8 +3,14 @@ const Schema = mongoose.Schema;
 const blogSchema = new Schema({
   title: {type: String},
   image: {
+    fieldname: {type: String},
+    originalname: {type: String},
+    encoding: {type: String},
+    mimetype: {type: String},
+    destination: {type: String},
+    filename: {type: String},
     path: {type: String},
-    filename: {type: String}
+    size: {type: Number}
   },
   author: {type: String},
   createOn: {type: String, default: Date.now()},
